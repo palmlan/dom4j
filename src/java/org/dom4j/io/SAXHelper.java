@@ -15,8 +15,8 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
  * <p>
- * <code>SAXHelper</code> contains some helper methods for working with SAX
- * and XMLReader objects.
+ * <code>SAXHelper</code> contains some helper methods for working with SAX and
+ * XMLReader objects.
  * </p>
  * 
  * @author <a href="mailto:james.strachan@metastuff.com">James Strachan </a>
@@ -62,6 +62,21 @@ class SAXHelper {
      * Creats a default XMLReader via the org.xml.sax.driver system property or
      * JAXP if the system property is not set.
      * 
+	 * This method internally calls {@link SAXParserFactory}
+	 * {@code .newInstance().newSAXParser().getXMLReader()} or
+	 * {@link XMLReaderFactory#createXMLReader()}. Be sure to configure returned
+	 * reader if the default configuration does not suit you. Consider setting
+	 * the following properties:
+	 * 
+	 * <pre>
+	 * reader.setFeature(
+	 * 		&quot;http://apache.org/xml/features/nonvalidating/load-external-dtd&quot;, false);
+	 * reader.setFeature(&quot;http://xml.org/sax/features/external-general-entities&quot;,
+	 * 		false);
+	 * reader.setFeature(&quot;http://xml.org/sax/features/external-parameter-entities&quot;,
+	 * 		false);
+	 * </pre>
+	 * 
      * @param validating
      *            DOCUMENT ME!
      * 
@@ -102,6 +117,31 @@ class SAXHelper {
         if (reader == null) {
             throw new SAXException("Couldn't create SAX reader");
         }
+
+		// configure namespace support
+		SAXHelper.setParserFeature(reader,
+				"http://xml.org/sax/features/namespaces", true);
+		SAXHelper.setParserFeature(reader,
+				"http://xml.org/sax/features/namespace-prefixes", false);
+
+		// external entites
+		SAXHelper.setParserFeature(reader,
+				"http://xml.org/sax/properties/external-general-entities",
+				false);
+		SAXHelper.setParserFeature(reader,
+				"http://xml.org/sax/properties/external-parameter-entities",
+				false);
+
+		// external DTD
+		SAXHelper
+				.setParserFeature(
+						reader,
+						"http://apache.org/xml/features/nonvalidating/load-external-dtd",
+						false);
+
+		// use Locator2 if possible
+		SAXHelper.setParserFeature(reader,
+				"http://xml.org/sax/features/use-locator2", true);
 
         return reader;
     }

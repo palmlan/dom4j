@@ -471,6 +471,20 @@ public class DTDTest extends AbstractTestCase {
             boolean includeInternal, boolean includeExternal) throws Exception {
         SAXReader reader = new SAXReader();
 
+        try {
+			reader.setFeature(
+					"http://apache.org/xml/features/nonvalidating/load-external-dtd",
+					true);
+			reader.setFeature(
+					"http://xml.org/sax/features/external-general-entities",
+					true);
+			reader.setFeature(
+					"http://xml.org/sax/features/external-parameter-entities",
+					true);
+		} catch (SAXException e) {
+			// nothing to do, incompatible reader
+		}
+		
         reader.setIncludeInternalDTDDeclarations(includeInternal);
 
         reader.setIncludeExternalDTDDeclarations(includeExternal);

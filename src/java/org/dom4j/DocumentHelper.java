@@ -267,15 +267,15 @@ public final class DocumentHelper {
      *             if the document could not be parsed
      */
     public static Document parseText(String text) throws DocumentException {
-        Document result = null;
+        SAXReader reader = SAXReader.createDefault();
 
-        SAXReader reader = new SAXReader();
+        // SAXReader reader = new SAXReader();
         String encoding = getEncoding(text);
 
         InputSource source = new InputSource(new StringReader(text));
         source.setEncoding(encoding);
 
-        result = reader.read(source);
+        Document result = reader.read(source);
 
         // if the XML parser doesn't provide a way to retrieve the encoding,
         // specify it manually

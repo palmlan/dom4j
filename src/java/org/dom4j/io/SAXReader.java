@@ -43,8 +43,8 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * 
  * <p>
  * To explicitly configure the SAX parser that is used via Java code you can use
- * a constructor or use the {@link #setXMLReader(XMLReader)}or {@link
- * #setXMLReaderClassName(String)} methods.
+ * a constructor or use the {@link #setXMLReader(XMLReader)}or
+ * {@link #setXMLReaderClassName(String)} methods.
  * </p>
  * 
  * <p>
@@ -77,18 +77,12 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * @version $Revision$
  */
 public class SAXReader {
-    private static final String SAX_STRING_INTERNING = 
-            "http://xml.org/sax/features/string-interning";
-    private static final String SAX_NAMESPACE_PREFIXES = 
-            "http://xml.org/sax/features/namespace-prefixes";
-    private static final String SAX_NAMESPACES = 
-            "http://xml.org/sax/features/namespaces";
-    private static final String SAX_DECL_HANDLER = 
-            "http://xml.org/sax/properties/declaration-handler";
-    private static final String SAX_LEXICAL_HANDLER = 
-            "http://xml.org/sax/properties/lexical-handler";
-    private static final String SAX_LEXICALHANDLER = 
-            "http://xml.org/sax/handlers/LexicalHandler";
+	private static final String SAX_STRING_INTERNING = "http://xml.org/sax/features/string-interning";
+	private static final String SAX_NAMESPACE_PREFIXES = "http://xml.org/sax/features/namespace-prefixes";
+	private static final String SAX_NAMESPACES = "http://xml.org/sax/features/namespaces";
+	private static final String SAX_DECL_HANDLER = "http://xml.org/sax/properties/declaration-handler";
+	private static final String SAX_LEXICAL_HANDLER = "http://xml.org/sax/properties/lexical-handler";
+	private static final String SAX_LEXICALHANDLER = "http://xml.org/sax/handlers/LexicalHandler";
 
     /** <code>DocumentFactory</code> used to create new document objects */
     private DocumentFactory factory;
@@ -135,6 +129,40 @@ public class SAXReader {
     /** The SAX filter used to filter SAX events */
     private XMLFilter xmlFilter;
 
+	public static SAXReader createDefault() {
+		SAXReader reader = new SAXReader();
+		try {
+			reader.setFeature(
+					"http://apache.org/xml/features/nonvalidating/load-external-dtd",
+					false);
+			reader.setFeature(
+					"http://xml.org/sax/features/external-general-entities",
+					false);
+			reader.setFeature(
+					"http://xml.org/sax/features/external-parameter-entities",
+					false);
+		} catch (SAXException e) {
+			// nothing to do, incompatible reader
+		}
+		return reader;
+	}
+
+	/**
+	 * This method internally calls {@link SAXParserFactory}
+	 * {@code .newInstance().newSAXParser().getXMLReader()} or
+	 * {@link XMLReaderFactory#createXMLReader()}. Be sure to configure returned
+	 * reader if the default configuration does not suit you. Consider setting
+	 * the following properties:
+	 * 
+	 * <pre>
+	 * reader.setFeature(
+	 * 		&quot;http://apache.org/xml/features/nonvalidating/load-external-dtd&quot;, false);
+	 * reader.setFeature(&quot;http://xml.org/sax/features/external-general-entities&quot;,
+	 * 		false);
+	 * reader.setFeature(&quot;http://xml.org/sax/features/external-parameter-entities&quot;,
+	 * 		false);
+	 * </pre>
+	 */
     public SAXReader() {
     }
 
@@ -297,11 +325,11 @@ public class SAXReader {
      * </p>
      * 
      * <p>
-     * If the systemId contains a <code>':'</code> character then it is
-     * assumed to be a URL otherwise its assumed to be a file name. If you want
-     * finer grained control over this mechansim then please explicitly pass in
-     * either a {@link URL}or a {@link File}instance instead of a {@link
-     * String} to denote the source of the document.
+	 * If the systemId contains a <code>':'</code> character then it is assumed
+	 * to be a URL otherwise its assumed to be a file name. If you want finer
+	 * grained control over this mechansim then please explicitly pass in either
+	 * a {@link URL}or a {@link File}instance instead of a {@link String} to
+	 * denote the source of the document.
      * </p>
      * 
      * @param systemId
@@ -554,7 +582,7 @@ public class SAXReader {
     }
 
     /**
-     * Sets whether String interning is enabled or disabled for element &
+	 * Sets whether String interning is enabled or disabled for element &amp;
      * attribute names and namespace URIs. This proprety is enabled by default.
      * 
      * @return DOCUMENT ME!
@@ -564,7 +592,7 @@ public class SAXReader {
     }
 
     /**
-     * Sets whether String interning is enabled or disabled for element &
+	 * Sets whether String interning is enabled or disabled for element &amp;
      * attribute names and namespace URIs
      * 
      * @param stringInternEnabled
@@ -637,8 +665,7 @@ public class SAXReader {
     /**
      * DOCUMENT ME!
      * 
-     * @return the <code>DocumentFactory</code> used to create document
-     *         objects
+	 * @return the <code>DocumentFactory</code> used to create document objects
      */
     public DocumentFactory getDocumentFactory() {
         if (factory == null) {
@@ -650,10 +677,9 @@ public class SAXReader {
 
     /**
      * <p>
-     * This sets the <code>DocumentFactory</code> used to create new
-     * documents. This method allows the building of custom DOM4J tree objects
-     * to be implemented easily using a custom derivation of
-     * {@link DocumentFactory}
+	 * This sets the <code>DocumentFactory</code> used to create new documents.
+	 * This method allows the building of custom DOM4J tree objects to be
+	 * implemented easily using a custom derivation of {@link DocumentFactory}
      * </p>
      * 
      * @param documentFactory
@@ -673,8 +699,8 @@ public class SAXReader {
     }
 
     /**
-     * Sets the <code>ErrorHandler</code> used by the SAX
-     * <code>XMLReader</code>.
+	 * Sets the <code>ErrorHandler</code> used by the SAX <code>XMLReader</code>
+	 * .
      * 
      * @param errorHandler
      *            is the <code>ErrorHandler</code> used by SAX
@@ -750,8 +776,8 @@ public class SAXReader {
     }
 
     /**
-     * Sets the class name of the <code>XMLReader</code> to be used to parse
-     * SAX events.
+	 * Sets the class name of the <code>XMLReader</code> to be used to parse SAX
+	 * events.
      * 
      * @param xmlReaderClassName
      *            is the class name of the <code>XMLReader</code> to parse SAX
@@ -766,8 +792,8 @@ public class SAXReader {
     }
 
     /**
-     * Adds the <code>ElementHandler</code> to be called when the specified
-     * path is encounted.
+	 * Adds the <code>ElementHandler</code> to be called when the specified path
+	 * is encounted.
      * 
      * @param path
      *            is the path to be handled
@@ -791,9 +817,9 @@ public class SAXReader {
     }
 
     /**
-     * When multiple <code>ElementHandler</code> instances have been
-     * registered, this will set a default <code>ElementHandler</code> to be
-     * called for any path which does <b>NOT </b> have a handler registered.
+	 * When multiple <code>ElementHandler</code> instances have been registered,
+	 * this will set a default <code>ElementHandler</code> to be called for any
+	 * path which does <b>NOT </b> have a handler registered.
      * 
      * @param handler
      *            is the <code>ElementHandler</code> to be called by the event
