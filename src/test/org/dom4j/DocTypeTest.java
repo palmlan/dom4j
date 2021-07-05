@@ -32,6 +32,8 @@ public class DocTypeTest extends AbstractTestCase {
     // -------------------------------------------------------------------------
     public void testDocType() throws Exception {
         SAXReader reader = new SAXReader();
+        
+        reader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", false);
         reader.setIncludeInternalDTDDeclarations(true);
 
         Document document = getDocument(INPUT_XML_FILE, reader);

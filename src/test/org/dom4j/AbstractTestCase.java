@@ -16,6 +16,7 @@ import org.apache.xerces.jaxp.SAXParserFactoryImpl;
 
 import org.dom4j.io.SAXReader;
 import org.dom4j.util.NodeComparator;
+import org.xml.sax.SAXException;
 
 /**
  * An abstract base class for some DOM4J test cases
@@ -43,7 +44,18 @@ public class AbstractTestCase extends TestCase {
     }
 
     protected Document getDocument(String path) throws Exception {
-        return getDocument(path, new SAXReader());
+    	SAXReader reader = SAXReader.createDefault();
+      
+    	try {
+            reader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", false);
+            reader.setFeature("http://xml.org/sax/features/external-parameter-entities", true);
+            reader.setFeature("http://xml.org/sax/features/external-general-entities", true);
+            reader.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", true);
+      } catch (SAXException e) {
+    	  	// nothing to do, incompatible reader
+      }
+      
+        return getDocument(path, reader);
     }
 
     protected Document getDocument(String path, SAXReader reader)

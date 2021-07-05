@@ -14,6 +14,7 @@ import java.util.List;
 
 import org.dom4j.io.SAXReader;
 import org.dom4j.rule.Pattern;
+import org.xml.sax.SAXException;
 
 /**
  * Performs a number of unit test cases on the XPath engine
@@ -24,6 +25,17 @@ import org.dom4j.rule.Pattern;
 public class XPathExamplesTest extends AbstractTestCase {
     protected SAXReader xmlReader = new SAXReader();
 
+    {
+	    try {
+	    	xmlReader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", false);
+	    	xmlReader.setFeature("http://xml.org/sax/features/external-parameter-entities", true);
+	    	xmlReader.setFeature("http://xml.org/sax/features/external-general-entities", true);
+	    	xmlReader.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", true);
+	      } catch (SAXException e) {
+	    	  	// nothing to do, incompatible reader
+	    }
+    }
+    
     /** The document on which the tests are being run */
     protected Document testDocument;
 

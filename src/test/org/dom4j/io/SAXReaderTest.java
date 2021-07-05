@@ -19,6 +19,7 @@ import org.dom4j.AbstractTestCase;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.xml.sax.SAXException;
 
 /**
  * A test harness to test the content API in DOM4J
@@ -47,6 +48,7 @@ public class SAXReaderTest extends AbstractTestCase {
     public void testEncoding() throws Exception {
         String xml = "<?xml version='1.0' encoding='ISO-8859-1'?><root/>";
         SAXReader reader = new SAXReader();
+        
         reader.setEncoding("ISO-8859-1");
         Document doc = reader.read(new StringReader(xml));
         
@@ -83,6 +85,24 @@ public class SAXReaderTest extends AbstractTestCase {
     public void testBug833765() throws Exception {
         SAXReader reader = new SAXReader();
         reader.setIncludeExternalDTDDeclarations(true);
+        
+		try {
+			reader.setFeature(
+					"http://apache.org/xml/features/disallow-doctype-decl",
+					false);
+			reader.setFeature(
+					"http://apache.org/xml/features/nonvalidating/load-external-dtd",
+					true);
+			reader.setFeature(
+					"http://xml.org/sax/features/external-general-entities",
+					true);
+			reader.setFeature(
+					"http://xml.org/sax/features/external-parameter-entities",
+					true);
+		} catch (SAXException e) {
+			// nothing to do, incompatible reader
+		}
+		
         getDocument("/xml/dtd/external.xml", reader);
     }
 

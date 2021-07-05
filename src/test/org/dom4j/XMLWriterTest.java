@@ -11,6 +11,7 @@ import junit.textui.TestRunner;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 
@@ -21,6 +22,7 @@ import org.dom4j.tree.BaseElement;
 import org.dom4j.tree.DefaultDocument;
 
 import org.xml.sax.ContentHandler;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
@@ -469,6 +471,16 @@ public class XMLWriterTest extends AbstractTestCase {
                 + "<!ENTITY Omega \"&#937;\"> ]>\n" + "<root />";
 
         SAXReader reader = new SAXReader("org.apache.xerces.parsers.SAXParser");
+        
+    	try {
+            reader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", false);
+            reader.setFeature("http://xml.org/sax/features/external-parameter-entities", true);
+            reader.setFeature("http://xml.org/sax/features/external-general-entities", true);
+            reader.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", true);
+	      } catch (SAXException e) {
+	    	  	// nothing to do, incompatible reader
+	    }
+	      
         reader.setIncludeInternalDTDDeclarations(true);
 
         Document doc = reader.read(new StringReader(xml));
@@ -479,7 +491,10 @@ public class XMLWriterTest extends AbstractTestCase {
         String xml2 = wr.toString();
         System.out.println(xml2);
 
-        Document doc2 = DocumentHelper.parseText(xml2);
+        //Document doc2 = DocumentHelper.parseText(xml2);
+        InputSource xml2stream = new InputSource(new ByteArrayInputStream(xml2.getBytes()));
+         xml2stream.setEncoding("ISO-8859-1");
+        Document doc2 = reader.read(xml2stream);
 
         assertNodesEqual(doc, doc2);
     }

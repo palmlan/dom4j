@@ -134,6 +134,10 @@ class SAXHelper {
 
 		// external DTD
 		SAXHelper.setParserFeature(
+				reader,
+				"http://apache.org/xml/features/disallow-doctype-decl",
+				true);
+		SAXHelper.setParserFeature(
 						reader,
 						"http://apache.org/xml/features/nonvalidating/load-external-dtd",
 						false);
