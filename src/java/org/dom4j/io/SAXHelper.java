@@ -133,8 +133,7 @@ class SAXHelper {
 				false);
 
 		// external DTD
-		SAXHelper
-				.setParserFeature(
+		SAXHelper.setParserFeature(
 						reader,
 						"http://apache.org/xml/features/nonvalidating/load-external-dtd",
 						false);
